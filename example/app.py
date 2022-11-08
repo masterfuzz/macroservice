@@ -1,3 +1,4 @@
+import os
 import json
 import sys
 import rsa
@@ -32,7 +33,20 @@ class Session:
 
 
 def main(method, path, file_name=None):
-    session = Session("admin", "admin_priv.pem")
+    if method.lower() == "gen":
+        if os.path.exists(f"{path}_priv.pem") or os.path.exists(f"{path}_pub.pem"):
+            print("Won't overwrite keys. delete them or chose a different name")
+            return
+        pub, priv = rsa.newkeys(512)
+        with open(f"{path}_priv.pem", "wb") as fh:
+            fh.write(priv.save_pkcs1())
+        with open(f"{path}_pub.pem", "wb") as fh:
+            fh.write(pub.save_pkcs1())
+        print(f"keys created at {path}_*.pem")
+        return
+
+    # session = Session("admin", "admin_priv.pem")
+    session = Session("admin", "bob_priv.pem")
     try:
         if method.lower()[0] == "g":
             obj = session.read_object(path)
