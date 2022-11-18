@@ -1,7 +1,7 @@
 import os
 import base64
 import rsa
-from bottle import route, run, request, HTTPError, post
+from bottle import get, run, request, HTTPError, post, static_file
 from message import Message
 
 
@@ -72,9 +72,9 @@ def api(username, resourcepath):
     raise HTTPError(405)
 
 
-@route("/")
-def ui():
-    return "hello"
+@get("/<filepath:re:.*\.(html|js|wasm)>")
+def ui(filepath):
+    return static_file(filepath, root="data/admin/static")
 
 
 if __name__ == "__main__":

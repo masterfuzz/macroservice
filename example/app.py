@@ -45,8 +45,7 @@ def main(method, path, file_name=None):
         print(f"keys created at {path}_*.pem")
         return
 
-    # session = Session("admin", "admin_priv.pem")
-    session = Session("admin", "bob_priv.pem")
+    session = Session("admin", "admin_priv.pem")
     try:
         if method.lower()[0] == "g":
             obj = session.read_object(path)
